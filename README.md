@@ -1,29 +1,22 @@
-# README #
+# GraysQL #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+GraysQL is a manager and loader for [GraphQL](http://graphql.org). It provides
+a uniform way of organize your GraphQL schema. GraphQL tries to create an easy
+to read codebase. It features a plugins API to allow the extension of the core
+functionalities.
 
-### What is this repository for? ###
+It's directly compatible with the [GraphQL](http://github.com/graphql/graphql-js)
+reference implementation.
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
-### How do I get set up? ###
+## Installation ##
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+Install from NPM. You need to install it's peer dependencies if you haven't
+done yet too.
 
-### Contribution guidelines ###
+```lang=bash
+$ npm install --save graysql graphql graphql-relay
+```
 
-* Writing tests
-* Code review
-* Other guidelines
 
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+## Examples ##
