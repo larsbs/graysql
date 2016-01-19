@@ -14,7 +14,7 @@ reference implementation.
 Install from NPM. You need to install it's peer dependencies if you haven't
 done yet too.
 
-```lang=bash
+```bash
 $ npm install --save graysql graphql graphql-relay
 ```
 
