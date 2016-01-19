@@ -1,0 +1,15 @@
+{
+  "name": "graysql",
+  "version": "0.1.0",
+  "description": "GraysQL is a GraphQL manager and loader.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "graphql"
+  ],
+  "author": "Lorenzo Ruiz <lars.bs@hotmail.com>",
+  "license": "MIT",
+  "repository": "private"
+}

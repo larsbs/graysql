@@ -1,0 +1,22 @@
+{
+  "extends": "eslint:recommended",
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "ecmaFeatures": {
+    "destructuring": true
+  },
+  "rules": {
+    "strict": 0,
+    "no-console": 0,
+    "no-unused-vars": 1,
+    "no-var": 1,
+    "prefer-const": 1,
+    "no-trailing-spaces": 1,
+    "quotes": [2, "single"],
+    "comma-dangle": [2, "never"],
+    "indent": [2, 2, { "SwitchCase": 2 }],
+    "semi": [2, "always"]
+  }
+}
