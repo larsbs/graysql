@@ -233,11 +233,11 @@ GraysQL.use(Graylay);
 > Registers a new type in the system.
   * **Parameters**
     * `type` *Function*: A valid [type]() to be registered.
-    * `overwrite` *Boolean*: A flag wether the registered type should overwrite
+    * `overwrite` *Boolean*: A flag wether the registered type should overwrite 
     an existent type with the same name or not.
   * **Returns**
     * *Function*: The registered type.
-
+    
 ```javascript
 const GraysQL = require('graysql');
 const GQL = new GraysQL();
@@ -260,7 +260,7 @@ GQL.registerType(UserType);
 > before the implementing types.
   * **Parameters**
     * `interface` *Function*: A valid [interface]() to be registered.
-    * `overwrite` *Boolean*: A flag wether the registered interface should overwrite
+    * `overwrite` *Boolean*: A flag wether the registered interface should overwrite 
     an existent interface with the same name or not.
   * **Returns**
     * *Function*: The registered interface.
@@ -281,19 +281,54 @@ GQL.registerInterface(EmployeeInterface);
 ```
 
 #### `GQL.addQuery(name, query, [overwrite])` ####
-> Adds a new query to the system. Note that if the type of the query is not already registered in the
+> Adds a new query to the system. Note that if the type of the query is not already registered in the 
 > system, this will throw an error.
   * **Parameters**
     * `name` *String*: The name of the query to be added.
     * `query` *Function*: A valid [query]() to be added.
-    * `overwrite` *Boolean*: A flag wether the registered query should overwrite
+    * `overwrite` *Boolean*: A flag wether the added query should overwrite 
     an existent query with the same name or not.
   * **Returns**
     * *Function*: The added query.
 
-## Plugins ##
+#### `GQL.addMutation(name, mutation, [overwrite])` ####
+> Adds a new mutation to the system. Note that if the type of the mutation is not already registered in the
+> system, this will throw an error.
+  * **Parameters**
+    * `name` *String*: The name of the mutation to be added.
+    * `mutation` *Function*: A valid [mutation]() to be added.
+    * `overwrite` *Boolean*: A flag wether the added mutation should overwrite an existent
+    mutation with the same name or not.
+  * **Returns**
+    * *Function*: The added mutation.
+
+## Extensions ##
 
 ### LoadFromDir ###
+Allows GraysQL to scan a folder to build a schema from the files found. You only need to define your 
+schema and GraysQL will take care of the registration process for you. This way, you can model your 
+schema from the dir structure. This allows you to add or delete objects on the fly, without having to 
+register the new ones, or de-register the old ones
+
+The folder structure that LoadFromDir will search for it's:
+
+```plain
+schema/
+├── types
+│   ├── type-name
+│   │   ├── queries
+│   │   │   └── query-name.js
+│   │   ├── mutations
+│   │   │   └── mutation-name.js
+│   │   └── index.js
+├── interfaces
+│   └── interface-name.js
+```
+
+Defines a new method in GraysQL:
+
+#### `GQL.load(directory, [clean])` ####
+
 ### Graylay ###
 
 ### Plugin API ###
