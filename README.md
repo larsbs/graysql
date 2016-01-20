@@ -42,8 +42,8 @@ GQL.registerType(require('./types/group'));
 GQL.registerType(function (GQL, types) {
   return {
     name: 'User',
-    nodeId: id => GQL.DB.getUser(id),
-    isTypeOf: obj => obj instanceof GQL.DB.User,
+    nodeId: id => GQL.options.DB.getUser(id),
+    isTypeOf: obj => obj instanceof GQL.options.DB.User,
     interfaces: ['Node'],
     fields: {
       id: {
@@ -64,7 +64,7 @@ GQL.registerType(function (GQL, types) {
             type: 'Int'
           }
         },
-        resolve: (_, args) => GQL.DB.getUser(args.id);
+        resolve: (_, args) => GQL.options.DB.getUser(args.id);
       },
       users: require('./queries/users')  // Or import them
     }
@@ -149,6 +149,9 @@ GQL.registerType(require('./types/user.js'));
 GQL.registerType(require('./types/group.js'));
 ```
 
+### Interfaces ###
+TODO
+
 ### Query ###
 
 In order to make request to the [Schema]() you must define [Queries]() in your
@@ -173,12 +176,120 @@ The query object should have three keys that are mandatory:
 #### Example Queries ####
 
 ```javascript
+// queries/user.js
+module.exports = function (GQL) {
+  return {
+    type: 'User',
+    args: {
+      id: { type: 'Int' }
+    },
+    resolve: (_, args) => GQL.options.DB.getUser(args.id)
+  }
+}
+
+// index.js
+GQL.addQuery('user', require('./queries/user'));
 ```
 
+### Mutations ###
+TODO
 
-### GQL ###
+## GraysQL ##
 
-#### Example GQL ####
+### Constructor ###
+
+#### `new GraysQL(options)` ####
+> GraysQL is initialized by passing an object with any number of custom keys. This
+> keys will be available later in the GraysQL instance.
+
+```javascript
+const DB = require('./db');
+const GraysQL = require('graysql');
+const GQL = new GraysQL({
+  DB: DB
+});
+console.log(GQL.options.DB);
+```
+
+### Static ###
+
+#### `GraysQL.use(extension)` ####
+> Receives a GraysQL extension and add it to GraysQL.
+  * **Parameters**
+    * `extension` *Function*: A valid [extension]() to be added.
+
+```javascript
+const GraysQL = require('graysql');
+const LoadFromDir = require('graysql/extensions/load-from-dir');
+const Graylay = require('graysql/extensions/graylay');
+
+GraysQL.use(LoadFromDir);
+GraysQL.use(Graylay);
+```
+
+### Methods ###
+
+#### `GQL.registerType(type, [overwrite])` ####
+> Registers a new type in the system.
+  * **Parameters**
+    * `type` *Function*: A valid [type]() to be registered.
+    * `overwrite` *Boolean*: A flag wether the registered type should overwrite
+    an existent type with the same name or not.
+  * **Returns**
+    * *Function*: The registered type.
+
+```javascript
+const GraysQL = require('graysql');
+const GQL = new GraysQL();
+
+const UserType = function (GQL) {
+  return {
+    name: 'User',
+    fields: {
+      id: { type: 'Int' },
+      nick: { type: 'String' }
+    }
+  };
+}
+
+GQL.registerType(UserType);
+```
+
+#### `GQL.registerInterface(interface, [overwrite])` ####
+> Registers a new interface in the system that can be later implemented by types. Interfaces should be registered
+> before the implementing types.
+  * **Parameters**
+    * `interface` *Function*: A valid [interface]() to be registered.
+    * `overwrite` *Boolean*: A flag wether the registered interface should overwrite
+    an existent interface with the same name or not.
+  * **Returns**
+    * *Function*: The registered interface.
+
+```javascript
+const GraysQL = require('graysql');
+const GQL = new GraysQL();
+
+const EmployeeInterface = function (GQL) {
+  return {
+    name: 'Employee',
+    fields: {
+      employeeId: { type: 'Int' }
+    }
+  };
+}
+GQL.registerInterface(EmployeeInterface);
+```
+
+#### `GQL.addQuery(name, query, [overwrite])` ####
+> Adds a new query to the system. Note that if the type of the query is not already registered in the
+> system, this will throw an error.
+  * **Parameters**
+    * `name` *String*: The name of the query to be added.
+    * `query` *Function*: A valid [query]() to be added.
+    * `overwrite` *Boolean*: A flag wether the registered query should overwrite
+    an existent query with the same name or not.
+  * **Returns**
+    * *Function*: The added query.
 
 ## Plugins ##
 
@@ -187,4 +298,5 @@ The query object should have three keys that are mandatory:
 
 ### Plugin API ###
 
+## Examples ##
 ## Tests ##
