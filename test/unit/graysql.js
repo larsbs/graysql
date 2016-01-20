@@ -9,24 +9,6 @@ const TestGroup = require('../support/types/group');
 module.exports = function (GraysQL) {
 
   describe('@GraysQL', function () {
-    describe('#use(extension)', function () {
-      before(function () {
-        GraysQL.use(TestExtension);
-      });
-      it('should only accept functions', function () {
-        expect(GraysQL.use.bind(GraysQL, 'asdf')).to.throw(TypeError, /GraysQL Error/);
-      });
-      it('should merge non listeners with the prototype', function () {
-        expect(GraysQL.prototype).to.contain.key('customMethod');
-      });
-      it('should pass GraysQL to the extensions', function () {
-        const GQL = new GraysQL();
-        expect(GQL.customMethod()).to.equal(GraysQL);
-      });
-      it('should not merge listeners with the prototype', function () {
-        expect(GraysQL.prototype).to.not.contain.key('onInit');
-      });
-    });
     describe('#constructor([options])', function () {
       it('should only accepts an object as options', function () {
         expect(() => new GraysQL('asdf')).to.throw(TypeError, /GraysQL Error/);
@@ -35,9 +17,26 @@ module.exports = function (GraysQL) {
         const GQL = new GraysQL({ test: 'testOption' });
         expect(GQL.options).to.contain.key('test');
       });
-      it('should call onInit listeners', function () {
-        const GQL = new GraysQL({ increaseOnInit: 1 });
+    });
+    describe('#use(extension)', function () {
+      const GQL = new GraysQL({ increaseOnInit: 1 });
+      before(function () {
+        GQL.use(TestExtension);
+      });
+      it('should only accept functions', function () {
+        expect(GQL.use.bind(GraysQL, 'asdf')).to.throw(TypeError, /GraysQL Error/);
+      });
+      it('should call onInit method in the extension', function () {
         expect(GQL.options.increaseOnInit).to.be.greaterThan(1);
+      });
+      it('should merge non listeners with the prototype', function () {
+        expect(GraysQL.prototype).to.contain.key('customMethod');
+      });
+      it('should pass GraysQL to the extensions', function () {
+        expect(GQL.customMethod()).to.equal(GraysQL);
+      });
+      it('should not merge listeners with the prototype', function () {
+        expect(GraysQL.prototype).to.not.contain.key('onInit');
       });
     });
     describe('#registerType(type, [overwrite])', function () {

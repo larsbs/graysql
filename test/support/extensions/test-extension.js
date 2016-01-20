@@ -3,6 +3,7 @@
 module.exports = function (GraysQL) {
   return {
     onInit() {
+      console.log(this);
       if (this && this.options && this.options.increaseOnInit) {
         this.options.increaseOnInit += 1;
       }

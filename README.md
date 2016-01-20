@@ -28,12 +28,12 @@ const GraphQLUtils = require('graphql/utilities');
 const GraysQL = require('graysql');  // Add support for Relay entities
 const DB = require('./db');  // Mockup data source
 
-// Add some extensions
-GraysQL.use(Graylay);
-
 const GQL = new GraysQL({
   DB: DB
 });
+
+// Add some extensions
+GQL.use(Graylay);
 
 // You can import types
 GQL.registerType(require('./types/group'));
@@ -211,7 +211,7 @@ const GQL = new GraysQL({
 console.log(GQL.options.DB);
 ```
 
-### Static ###
+### Methods ###
 
 #### `GraysQL.use(extension)` ####
 > Receives a GraysQL extension and add it to GraysQL.
@@ -223,21 +223,20 @@ const GraysQL = require('graysql');
 const LoadFromDir = require('graysql/extensions/load-from-dir');
 const Graylay = require('graysql/extensions/graylay');
 
-GraysQL.use(LoadFromDir);
-GraysQL.use(Graylay);
+const GQL = new GraysQL();
+GQL.use(LoadFromDir);
+GQL.use(Graylay);
 ```
-
-### Methods ###
 
 #### `GQL.registerType(type, [overwrite])` ####
 > Registers a new type in the system.
   * **Parameters**
     * `type` *Function*: A valid [type]() to be registered.
-    * `overwrite` *Boolean*: A flag wether the registered type should overwrite 
+    * `overwrite` *Boolean*: A flag wether the registered type should overwrite
     an existent type with the same name or not.
   * **Returns**
     * *Function*: The registered type.
-    
+
 ```javascript
 const GraysQL = require('graysql');
 const GQL = new GraysQL();
@@ -260,7 +259,7 @@ GQL.registerType(UserType);
 > before the implementing types.
   * **Parameters**
     * `interface` *Function*: A valid [interface]() to be registered.
-    * `overwrite` *Boolean*: A flag wether the registered interface should overwrite 
+    * `overwrite` *Boolean*: A flag wether the registered interface should overwrite
     an existent interface with the same name or not.
   * **Returns**
     * *Function*: The registered interface.
@@ -281,12 +280,12 @@ GQL.registerInterface(EmployeeInterface);
 ```
 
 #### `GQL.addQuery(name, query, [overwrite])` ####
-> Adds a new query to the system. Note that if the type of the query is not already registered in the 
+> Adds a new query to the system. Note that if the type of the query is not already registered in the
 > system, this will throw an error.
   * **Parameters**
     * `name` *String*: The name of the query to be added.
     * `query` *Function*: A valid [query]() to be added.
-    * `overwrite` *Boolean*: A flag wether the added query should overwrite 
+    * `overwrite` *Boolean*: A flag wether the added query should overwrite
     an existent query with the same name or not.
   * **Returns**
     * *Function*: The added query.
@@ -305,9 +304,9 @@ GQL.registerInterface(EmployeeInterface);
 ## Extensions ##
 
 ### LoadFromDir ###
-Allows GraysQL to scan a folder to build a schema from the files found. You only need to define your 
-schema and GraysQL will take care of the registration process for you. This way, you can model your 
-schema from the dir structure. This allows you to add or delete objects on the fly, without having to 
+Allows GraysQL to scan a folder to build a schema from the files found. You only need to define your
+schema and GraysQL will take care of the registration process for you. This way, you can model your
+schema from the dir structure. This allows you to add or delete objects on the fly, without having to
 register the new ones, or de-register the old ones
 
 The folder structure that LoadFromDir will search for it's:
@@ -326,7 +325,7 @@ Where:
   * **type-name/**: Contains a type. The type is defined in the `index.js` file.
   * **interfaces/**: Contains the interfaces. Each interface goes in it's own file `interface-name.js`.
 
-In order for the queries to be automatically added to GraysQL, each type should define its queries 
+In order for the queries to be automatically added to GraysQL, each type should define its queries
 in its own `query` key.
 
 LoadFromDir defines a new method in GraysQL:
@@ -343,7 +342,7 @@ LoadFromDir defines a new method in GraysQL:
 module.exports = function (GQL) {
   return {
     name: 'User',
-    fields: { 
+    fields: {
       id: { type: 'Int' },
       nick: { type: 'String' }
     },
@@ -361,9 +360,8 @@ const DB = require('./db');
 const GraysQL = require('graysql');
 const LoadFromDir = require('graysql/extensions/load-from-dir');
 
-GraysQL.use(LoadFromDir);
-
 const GQL = new GraysQL({ DB: DB });
+GQL.use(LoadFromDir);
 GQL.load('schema');
 ```
 
@@ -381,8 +379,6 @@ const GraysQL = require('graysql');
 const DB = require('./db');
 const GraphQLRelay = require('graphql-relay');
 const Graylay = require('graysql/extensions/graylay');
-
-GraysQL.use(Graylay);
 
 const UserType = function (GQL) {
   return {
@@ -405,6 +401,7 @@ const UserType = function (GQL) {
 }
 
 const GQL = new GraysQL({ DB: DB });
+GQL.use(Graylay);
 GQL.registerType(UserType);
 ```
 
