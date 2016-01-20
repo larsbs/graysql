@@ -4,12 +4,25 @@
   "description": "GraysQL is a GraphQL manager and loader.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run lint && mocha --check-leaks -t 5000 test/index.js",
+    "lint": "eslint index.js lib/"
   },
   "keywords": [
     "graphql"
   ],
   "author": "Lorenzo Ruiz <lars.bs@hotmail.com>",
   "license": "MIT",
-  "repository": "private"
+  "repository": "private",
+  "peerDependencies": {
+    "graphql": "^0.4.14",
+    "graphql-relay": "^0.3.6"
+  },
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "eslint": "^1.10.3",
+    "graphql": "^0.4.14",
+    "graphql-relay": "^0.3.6",
+    "mocha": "^2.3.4"
+  },
+  "dependencies": {}
 }
