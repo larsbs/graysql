@@ -302,6 +302,11 @@ GQL.registerInterface(EmployeeInterface);
   * **Returns**
     * *Object*: The added mutation.
 
+#### `GQL.generateSchema()` ####
+> Generates a [GraphQLSchema]() from the registered objects.
+  * **Returns**
+    * *GraphQLSchema*: The generated schema.
+
 ## Extensions ##
 
 ### LoadFromDir ###

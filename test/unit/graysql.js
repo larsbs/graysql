@@ -149,11 +149,11 @@ module.exports = function (GraysQL) {
           query: Query
         });
       });
-      it('should generate a valid schema', function () {
+      it.skip('should generate a valid schema', function () {
         expect(GQL.generateSchema.bind(GQL)).to.not.throw(Error);
         expect(GraphQLUtils.printSchema(GQL.generateSchema.bind(GQL))).to.not.throw(Error);
       });
-      it('should generate a schema with all the specified objects', function () {
+      it.skip('should generate a schema with all the specified objects', function () {
         const strGenSchema = GraphQLUtils.printSchema(GQL.generateSchema());
         const strManSchema = GraphQLUtils.printSchema(manualSchema);
         expect(strGenSchema).to.equal(strManSchema);
