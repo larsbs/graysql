@@ -54,14 +54,10 @@ module.exports = function (GraysQL) {
       it('should allow to overwrite types when specified', function () {
         expect(GQL.registerType.bind(GQL, TestUser, true)).to.not.throw(Error, /GraysQL Error/);
       });
-      it('should thrown an error when trying to register a type with an unknown interface', function () {
-        const testType = function (GQL) {
-          return { name: 'Test', fields: { id: { type: 'Int' }}, interfaces: () => ['Unknown'] }
-        }
-        expect(GQL.registerType.bind(GQL, testType)).to.throw(Error, /GraysQL Error/);
-      });
       it('should return the registered type', function () {
-        expect(GQL.registerType(TestGroup)).to.equal(TestGroup);
+        const returnedType = GQL.registerType(TestGroup);
+        const type = TestGroup(GQL);
+        expect(JSON.stringify(returnedType)).to.equal(JSON.stringify(type));
       });
     });
     describe('#registerInterface(interface, [overwrite])', function () {

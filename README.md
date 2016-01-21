@@ -25,7 +25,8 @@ Here is a simple example to get started:
 
 ```javascript
 const GraphQLUtils = require('graphql/utilities');
-const GraysQL = require('graysql');  // Add support for Relay entities
+const GraysQL = require('graysql');
+const Graylay = require('graysql/extensions/graylay');  // Add support for Relay entities
 const DB = require('./db');  // Mockup data source
 
 const GQL = new GraysQL({
@@ -235,7 +236,7 @@ GQL.use(Graylay);
     * `overwrite` *Boolean*: A flag wether the registered type should overwrite
     an existent type with the same name or not.
   * **Returns**
-    * *Function*: The registered type.
+    * *Object*: The registered type.
 
 ```javascript
 const GraysQL = require('graysql');
@@ -262,7 +263,7 @@ GQL.registerType(UserType);
     * `overwrite` *Boolean*: A flag wether the registered interface should overwrite
     an existent interface with the same name or not.
   * **Returns**
-    * *Function*: The registered interface.
+    * *Object*: The registered interface.
 
 ```javascript
 const GraysQL = require('graysql');
@@ -288,7 +289,7 @@ GQL.registerInterface(EmployeeInterface);
     * `overwrite` *Boolean*: A flag wether the added query should overwrite
     an existent query with the same name or not.
   * **Returns**
-    * *Function*: The added query.
+    * *Object*: The added query.
 
 #### `GQL.addMutation(name, mutation, [overwrite])` ####
 > Adds a new mutation to the system. Note that if the type of the mutation is not already registered in the
@@ -299,7 +300,7 @@ GQL.registerInterface(EmployeeInterface);
     * `overwrite` *Boolean*: A flag wether the added mutation should overwrite an existent
     mutation with the same name or not.
   * **Returns**
-    * *Function*: The added mutation.
+    * *Object*: The added mutation.
 
 ## Extensions ##
 
