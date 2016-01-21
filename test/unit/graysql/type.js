@@ -31,6 +31,7 @@ module.exports = function (Type) {
         });
         const genType = new Type(SimpleType());
         expect(genType.generate()).to.include.keys(Object.keys(Simple));
+        expect(genType.generate()._typeConfig.fields()).to.include.keys(Object.keys(Simple._typeConfig.fields()));
       });
       it('should link to other GraphQLObjectTypes if specified', function () {
         const User = new graphql.GraphQLObjectType({
