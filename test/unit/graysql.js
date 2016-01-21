@@ -8,6 +8,7 @@ const DB = require('../support/db');
 const TestExtension = require('../support/extensions/test-extension');
 const TestUser = require('../support/types/user');
 const TestGroup = require('../support/types/group');
+const SimpleType = require('../support/types/simple');
 
 
 module.exports = function (GraysQL) {
@@ -65,42 +66,63 @@ module.exports = function (GraysQL) {
       });
     });
     describe('#registerInterface(interface, [overwrite])', function () {
-      it('should only register functions', function () {
-      });
-      it('should not overwrite an interface by default', function () {
-      });
-      it('should allow to overwrite interfaces when specified', function () {
-      });
-      it('should return the registered interface', function () {
-      });
+      it('should only register functions');
+      it('should not overwrite an interface by default');
+      it('should allow to overwrite interfaces when specified');
+      it('should return the registered interface');
     });
     describe('#addQuery(name, query, [overwrite])', function () {
+      let GQL;
+      beforeEach(function () {
+        GQL = new GraysQL();
+      });
       it('should only add functions', function () {
+        expect(GQL.addQuery.bind(GQL, 'adfs', 'asdfa')).to.throw(TypeError, /GraysQL Error: Expected query to be a function/);
+        expect(GQL.addQuery.bind(GQL, 'adfs', x => x)).to.not.throw(TypeError, /GraysQL Error: Expected query to be a function/);
       });
       it('should not add a query with an undefined name', function () {
-      });
-      it('should not add a query with an unknown type', function () {
+        const user = (GQL) => TestUser().queries.user;
+        expect(GQL.addQuery.bind(GQL, null, user)).to.throw(Error, /GraysQL Error: Missing query name/);
+        expect(GQL.addQuery.bind(GQL, undefined, user)).to.throw(Error, /GraysQL Error: Missing query name/);
+        expect(GQL.addQuery.bind(GQL, '', user)).to.throw(Error, /GraysQL Error: Missing query name/);
       });
       it('should not ovewrite a query by default', function () {
+        GQL.registerType(SimpleType);
+        const q = (GQL) => ({
+          type: 'Simple',
+          args: { id: { type: 'Int' } },
+          resolve: (_, args) => { id: 1 }
+        });
+        GQL.addQuery('Simple', q);
+        expect(GQL.addQuery.bind(GQL, 'Simple', q)).to.throw(Error, /GraysQL Error/);
       });
       it('should allow to overwrite queries when specified', function () {
+        GQL.registerType(SimpleType);
+        const q = (GQL) => ({
+          type: 'Simple',
+          args: { id: { type: 'Int' } },
+          resolve: (_, args) => { id: 1 }
+        });
+        GQL.addQuery('Simple', q);
+        expect(GQL.addQuery.bind(GQL, 'Simple', q, true)).to.not.throw(Error, /GraysQL Error/);
       });
       it('should return the added query', function () {
+        GQL.registerType(SimpleType);
+        const q = (GQL) => ({
+          type: 'Simple',
+          args: { id: { type: 'Int' } },
+          resolve: (_, args) => { id: 1 }
+        });
+        expect(JSON.stringify(GQL.addQuery('Simple', q))).to.equal(JSON.stringify(q(GQL)));
       });
     });
     describe('#addMutation(name, mutation, [ovewrite])', function () {
-      it('should only add functions', function () {
-      });
-      it('should not add a mutation with an undefined name', function () {
-      });
-      it('should not add a mutation with an unkown type', function () {
-      });
-      it('should not overwrite a mutation by default', function () {
-      });
-      it('should allow to overwrite mutations when specified', function () {
-      });
-      it('should return the added mutation', function () {
-      });
+      it('should only add functions');
+      it('should not add a mutation with an undefined name');
+      it('should not add a mutation with an unkown type');
+      it('should not overwrite a mutation by default');
+      it('should allow to overwrite mutations when specified');
+      it('should return the added mutation');
     });
     describe('#generateSchema()', function () {
       let GQL;
