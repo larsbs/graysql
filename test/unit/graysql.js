@@ -1,6 +1,10 @@
 'use strict';
 
 const expect = require('chai').expect;
+const graphql = require('graphql');
+const GraphQLUtils = require('graphql/utilities');
+
+const DB = require('../support/db');
 const TestExtension = require('../support/extensions/test-extension');
 const TestUser = require('../support/types/user');
 const TestGroup = require('../support/types/group');
@@ -99,9 +103,60 @@ module.exports = function (GraysQL) {
       });
     });
     describe('#generateSchema()', function () {
+      let GQL;
+      let manualSchema;
+      before(function () {
+        GQL = new GraysQL();
+        GQL.registerType(TestUser);
+        GQL.registerType(TestGroup);
+
+        const User = new graphql.GraphQLObjectType({
+          name: 'User',
+          fields: () => ({
+            id: { type: graphql.GraphQLInt },
+            nick: { type: graphql.GraphQLString },
+            group: { type: Group }
+          })
+        });
+        const Group = new graphql.GraphQLObjectType({
+          name: 'Group',
+          fields: () => ({
+            id: { type: graphql.GraphQLInt },
+            nick: { type: graphql.GraphQLString },
+            members: { type: new graphql.GraphQLList(User) }
+          })
+        });
+        const Query = new graphql.GraphQLObjectType({
+          name: 'Query',
+          fields: () => ({
+            user: {
+              type: User,
+              args: {
+                id: { type: graphql.GraphQLInt }
+              },
+              resolve: (_, args) => DB.getUser(args.id)
+            },
+            group: {
+              type: Group,
+              args: {
+                id: { type: graphql.GraphQLInt }
+              },
+              resolve: (_, args) => DB.getGroup(args.id)
+            }
+          })
+        });
+        manualSchema = new graphql.GraphQLSchema({
+          query: Query
+        });
+      });
       it('should generate a valid schema', function () {
+        expect(GQL.generateSchema.bind(GQL)).to.not.throw(Error);
+        expect(GraphQLUtils.printSchema(GQL.generateSchema.bind(GQL))).to.not.throw(Error);
       });
       it('should generate a schema with all the specified objects', function () {
+        const strGenSchema = GraphQLUtils.printSchema(GQL.generateSchema());
+        const strManSchema = GraphQLUtils.printSchema(manualSchema);
+        expect(strGenSchema).to.equal(strManSchema);
       });
     });
   });
