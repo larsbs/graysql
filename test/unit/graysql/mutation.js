@@ -1,5 +1,9 @@
 'use strict';
 
+const graphql = require('graphql');
+const expect = require('chai').expect;
+
+
 module.exports = function (Mutation) {
 
   describe('@Mutation', function () {

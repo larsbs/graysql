@@ -15,6 +15,15 @@ module.exports = function (GQL) {
         },
         resolve: (_, args) => { id: 1}
       }
+    },
+    mutations: {
+      createSimple: {
+        type: 'Simple',
+        args: {
+          id: { type: 'Int' }
+        },
+        resolve: (_, args) => { id: args.id }
+      }
     }
   };
 }

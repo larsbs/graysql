@@ -55,6 +55,7 @@ module.exports = function (Type) {
 
       it('should call onParseField listeners');
       it('should call onGenerateType listeners');
+      it('should link to specified interfaces');
       it('should generate a valid GraphQLObjectType', function () {
         expect(finalTypes['User']).to.include.keys(Object.keys(User));
         expect(finalTypes['User']._typeConfig.fields()).to.include.keys(Object.keys(User._typeConfig.fields()));

@@ -427,6 +427,10 @@ The tests are write with [mocha]() and can be runned with the following command:
 $ npm test
 ```
 
+## TODO ##
+
+- [ ] Add support for non nullable args in mutations and queries.
+
 ## License ##
 
 [MIT](LICENSE)
