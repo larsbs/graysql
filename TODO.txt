@@ -1,1 +1,0 @@
-[] - Change the use() function from been a static function to be an instance function
