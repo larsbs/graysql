@@ -14,6 +14,7 @@ const SimpleType = require('../support/types/simple');
 module.exports = function (GraysQL) {
 
   describe('@GraysQL', function () {
+
     describe('#constructor([options])', function () {
       it('should only accepts an object as options', function () {
         expect(() => new GraysQL('asdf')).to.throw(TypeError, /GraysQL Error/);
@@ -23,6 +24,7 @@ module.exports = function (GraysQL) {
         expect(GQL.options).to.contain.key('test');
       });
     });
+
     describe('#use(extension)', function () {
       const GQL = new GraysQL({ increaseOnInit: 1 });
       before(function () {
@@ -44,20 +46,21 @@ module.exports = function (GraysQL) {
         expect(GraysQL.prototype).to.not.contain.key('onInit');
       });
     });
+
     describe('#registerType(type, [overwrite])', function () {
       let GQL;
       before(function () {
         GQL = new GraysQL();
       });
       it('should only register functions', function () {
-        expect(GQL.registerType.bind(GQL, 'asdfa')).to.throw(TypeError, /GraysQL Error/);
+        expect(GQL.registerType.bind(GQL, 'asdfa')).to.throw(TypeError, /GraysQL Error: Expected type to be a function/);
       });
       it('should not overwrite a type by default', function () {
         GQL.registerType(TestUser);
-        expect(GQL.registerType.bind(GQL, TestUser)).to.throw(Error, /GraysQL Error/);
+        expect(GQL.registerType.bind(GQL, TestUser)).to.throw(Error, /GraysQL Error: Type /);
       });
       it('should allow to overwrite types when specified', function () {
-        expect(GQL.registerType.bind(GQL, TestUser, true)).to.not.throw(Error, /GraysQL Error/);
+        expect(GQL.registerType.bind(GQL, TestUser, true)).to.not.throw(Error, /GraysQL Error: Type /);
       });
       it('should return the registered type', function () {
         const returnedType = GQL.registerType(TestGroup);
@@ -65,12 +68,14 @@ module.exports = function (GraysQL) {
         expect(JSON.stringify(returnedType)).to.equal(JSON.stringify(type));
       });
     });
+
     describe('#registerInterface(interface, [overwrite])', function () {
       it('should only register functions');
       it('should not overwrite an interface by default');
       it('should allow to overwrite interfaces when specified');
       it('should return the registered interface');
     });
+
     describe('#addQuery(name, query, [overwrite])', function () {
       let GQL;
       beforeEach(function () {
@@ -116,6 +121,7 @@ module.exports = function (GraysQL) {
         expect(JSON.stringify(GQL.addQuery('Simple', q))).to.equal(JSON.stringify(q(GQL)));
       });
     });
+
     describe('#addMutation(name, mutation, [ovewrite])', function () {
       it('should only add functions');
       it('should not add a mutation with an undefined name');
@@ -124,6 +130,7 @@ module.exports = function (GraysQL) {
       it('should allow to overwrite mutations when specified');
       it('should return the added mutation');
     });
+
     describe('#generateSchema()', function () {
       let GQL;
       let manualSchema;
@@ -144,7 +151,7 @@ module.exports = function (GraysQL) {
           name: 'Group',
           fields: () => ({
             id: { type: graphql.GraphQLInt },
-            nick: { type: graphql.GraphQLString },
+            name: { type: graphql.GraphQLString },
             members: { type: new graphql.GraphQLList(User) }
           })
         });
@@ -171,11 +178,45 @@ module.exports = function (GraysQL) {
           query: Query
         });
       });
-      it.skip('should generate a valid schema', function () {
+      it('should generate a valid schema', function (done) {
         expect(GQL.generateSchema.bind(GQL)).to.not.throw(Error);
-        expect(GraphQLUtils.printSchema(GQL.generateSchema.bind(GQL))).to.not.throw(Error);
+        const Schema = GQL.generateSchema();
+        const query = `query GetUser {
+          user(id: 1) {
+            id,
+            nick,
+            group {
+              id,
+              name,
+              members {
+                id
+              }
+            }
+          }
+        }`;
+        const expected = {
+          data: {
+            user: {
+              id: 1,
+              nick: 'Lars',
+              group: {
+                id: 1,
+                name: 'Group 1',
+                members: [{
+                  id: 1
+                }, {
+                  id: 2
+                }]
+              }
+            }
+          }
+        };
+        graphql.graphql(Schema, query).then(result => {
+          expect(result).to.deep.equal(expected);
+          done();
+        });
       });
-      it.skip('should generate a schema with all the specified objects', function () {
+      it('should generate a schema with all the specified objects', function () {
         const strGenSchema = GraphQLUtils.printSchema(GQL.generateSchema());
         const strManSchema = GraphQLUtils.printSchema(manualSchema);
         expect(strGenSchema).to.equal(strManSchema);

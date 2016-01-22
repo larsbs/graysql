@@ -5,10 +5,10 @@ const DB = require('../db');
 
 module.exports = function (GQL) {
   return {
-    name: 'TestType',
+    name: 'User',
     fields: {
       id: { type: 'Int' },
-      name: { type: 'String' },
+      nick: { type: 'String' },
       group: { type: 'Group' }
     },
     queries: {

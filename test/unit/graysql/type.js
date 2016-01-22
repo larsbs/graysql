@@ -14,27 +14,19 @@ module.exports = function (Type) {
   describe('@Type', function () {
     describe('#constructor(rawType)', function () {
       it('should only accept a POJO as parameter', function () {
-        expect(() => new Type('adsfa')).to.throw(TypeError, /GraysQL Error/);
-        expect(() => new Type(x => x)).to.throw(TypeError, /GraysQL Error/);
-        expect(() => new Type({})).to.not.throw(TypeError, /GraysQL Error/);
+        expect(() => new Type('adsfa')).to.throw(TypeError, /GraysQL Error: Expected rawType to be an object/);
+        expect(() => new Type(x => x)).to.throw(TypeError, /GraysQL Error: Expected rawType to be an object/);
+        expect(() => new Type({})).to.not.throw(TypeError, /GraysQL Error: Expected rawType to be an object/);
       });
     });
     describe('#generate(types, interfaces)', function () {
-      it('should call onParseField listeners');
-      it('should call onGenerateType listeners');
-      it('should generate a valid GraphQLObjectType', function () {
-        const Simple = new graphql.GraphQLObjectType({
-          name: 'Simple',
-          fields: () => ({
-            id: { type: graphql.GraphQLInt }
-          })
-        });
-        const genType = new Type(SimpleType());
-        expect(genType.generate()).to.include.keys(Object.keys(Simple));
-        expect(genType.generate()._typeConfig.fields()).to.include.keys(Object.keys(Simple._typeConfig.fields()));
-      });
-      it('should link to other GraphQLObjectTypes if specified', function () {
-        const User = new graphql.GraphQLObjectType({
+      let User;
+      let Group;
+      let types;
+      let finalTypes;
+
+      before(function () {
+        User = new graphql.GraphQLObjectType({
           name: 'User',
           fields: () => ({
             id: { type: graphql.GraphQLInt },
@@ -42,8 +34,7 @@ module.exports = function (Type) {
             group: { type: Group }
           })
         });
-
-        const Group = new graphql.GraphQLObjectType({
+        Group = new graphql.GraphQLObjectType({
           name: 'Group',
           fields: () => ({
             id: { type: graphql.GraphQLInt },
@@ -52,18 +43,25 @@ module.exports = function (Type) {
           })
         });
 
-        const types = {
-          User: TestUser({ options: { DB }}),
-          Group: TestGroup({ options: { DB }})
+        types = {
+          User: new Type(TestUser({ options: { DB }})),
+          Group: new Type(TestGroup({ options: { DB }})),
         };
 
-        const user = new Type(types['User']);
-        const group = new Type(types['Group']);
+        finalTypes = { User: {}, Group: {} };
+        finalTypes['User'] = types['User'].generate(finalTypes);
+        finalTypes['Group'] = types['Group'].generate(finalTypes);
+      });
 
-        types['User'] = user.generate(types);
-        types['Group'] = group.generate(types);
-
-        expect(types['User']._typeConfig.fields().group.type).to.equal(types['Group']);
+      it('should call onParseField listeners');
+      it('should call onGenerateType listeners');
+      it('should generate a valid GraphQLObjectType', function () {
+        expect(finalTypes['User']).to.include.keys(Object.keys(User));
+        expect(finalTypes['User']._typeConfig.fields()).to.include.keys(Object.keys(User._typeConfig.fields()));
+      });
+      it('should link to other GraphQLObjectTypes if specified', function () {
+        expect(finalTypes['User']._typeConfig.fields().group.type).to.equal(finalTypes['Group']);
+        expect(JSON.stringify(finalTypes['Group']._typeConfig.fields().members.type)).to.equal(JSON.stringify(new graphql.GraphQLList(finalTypes['User'])));
       });
     });
   });
