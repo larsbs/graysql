@@ -9,6 +9,7 @@ const TestExtension = require('../support/extensions/test-extension');
 const TestUser = require('../support/types/user');
 const TestGroup = require('../support/types/group');
 const SimpleType = require('../support/types/simple');
+const TestEmployee = require('../support/interfaces/employee');
 
 
 module.exports = function (GraysQL) {
@@ -70,10 +71,25 @@ module.exports = function (GraysQL) {
     });
 
     describe('#registerInterface(interface, [overwrite])', function () {
-      it('should only register functions');
-      it('should not overwrite an interface by default');
-      it('should allow to overwrite interfaces when specified');
-      it('should return the registered interface');
+      let GQL;
+      beforeEach(function () {
+        GQL = new GraysQL();
+      });
+      it('should only register functions', function () {
+        expect(GQL.registerInterface.bind(GQL, 'asdf')).to.throw(TypeError, /GraysQL Error: Expected interface to be a function/)
+      });
+      it('should not overwrite an interface by default', function () {
+        GQL.registerInterface(TestEmployee);
+        expect(GQL.registerInterface.bind(GQL, TestEmployee)).to.throw(Error, /GraysQL Error: Interface/);
+      });
+      it('should allow to overwrite interfaces when specified', function () {
+        expect(GQL.registerInterface.bind(GQL, TestEmployee, true)).to.not.throw(Error, /GraysQL Error: Interface/);
+      });
+      it('should return the registered interface', function () {
+        const returnedInterface = GQL.registerInterface(TestEmployee);
+        const iface = TestEmployee(GQL);
+        expect(JSON.stringify(returnedInterface)).to.equal(JSON.stringify(iface));
+      });
     });
 
     describe('#addQuery(name, query, [overwrite])', function () {
