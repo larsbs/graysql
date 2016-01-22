@@ -32,7 +32,7 @@ module.exports = function (Query) {
       it('should call onParseArgs listeners');
       it('should call onGenerateQuery listeners');
 
-      it('should replace all the types in the query by valid GraphQL types', function () {
+      it('should replace all the types in the query with valid GraphQL types', function () {
         const query = new Query(SimpleType().queries.simple);
         expect(query.generate({ Simple }).type).to.equal(Simple);
       });
