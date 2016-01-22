@@ -19,6 +19,18 @@ module.exports = function (GQL) {
         },
         resolve: (_, args) => DB.getUser(args.id)
       }
+    },
+    mutations: {
+      createUser: {
+        type: 'User',
+        args: {
+          nick: { type: 'String' },
+        },
+        resolve: (_, args) => ({
+          id: 5,
+          nick: args.nick
+        })
+      }
     }
   };
 }

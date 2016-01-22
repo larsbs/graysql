@@ -92,7 +92,6 @@ module.exports = function (GraysQL) {
         expect(GQL.addQuery.bind(GQL, '', user)).to.throw(Error, /GraysQL Error: Missing query name/);
       });
       it('should not ovewrite a query by default', function () {
-        GQL.registerType(SimpleType);
         const q = (GQL) => ({
           type: 'Simple',
           args: { id: { type: 'Int' } },
@@ -102,7 +101,6 @@ module.exports = function (GraysQL) {
         expect(GQL.addQuery.bind(GQL, 'Simple', q)).to.throw(Error, /GraysQL Error/);
       });
       it('should allow to overwrite queries when specified', function () {
-        GQL.registerType(SimpleType);
         const q = (GQL) => ({
           type: 'Simple',
           args: { id: { type: 'Int' } },
@@ -112,7 +110,6 @@ module.exports = function (GraysQL) {
         expect(GQL.addQuery.bind(GQL, 'Simple', q, true)).to.not.throw(Error, /GraysQL Error/);
       });
       it('should return the added query', function () {
-        GQL.registerType(SimpleType);
         const q = (GQL) => ({
           type: 'Simple',
           args: { id: { type: 'Int' } },
@@ -123,12 +120,34 @@ module.exports = function (GraysQL) {
     });
 
     describe('#addMutation(name, mutation, [ovewrite])', function () {
-      it('should only add functions');
-      it('should not add a mutation with an undefined name');
-      it('should not add a mutation with an unkown type');
-      it('should not overwrite a mutation by default');
-      it('should allow to overwrite mutations when specified');
-      it('should return the added mutation');
+      let GQL;
+      beforeEach(function () {
+        GQL = new GraysQL();
+      });
+      it('should only add functions', function () {
+        expect(GQL.addMutation.bind(GQL, 'asdfadf', 'asfa')).to.throw(TypeError, /GraysQL Error: Expected mutation to be a function/);
+        expect(GQL.addMutation.bind(GQL, 'asdfadf', x => x)).to.not.throw(TypeError, /GraysQL Error: Expected mutation to be a function/);
+      });
+      it('should not add a mutation with an undefined name', function () {
+        const user = (GQL) => TestUser().mutations.createUser;
+        expect(GQL.addMutation.bind(GQL, null, user)).to.throw(Error, /GraysQL Error: Missing mutation name/);
+        expect(GQL.addMutation.bind(GQL, undefined, user)).to.throw(Error, /GraysQL Error: Missing mutation name/);
+        expect(GQL.addMutation.bind(GQL, '', user)).to.throw(Error, /GraysQL Error: Missing mutation name/);
+      });
+      it('should not overwrite a mutation by default', function () {
+        GQL.registerType(TestUser);
+        const user = (GQL) => TestUser().mutations.createUser;
+        expect(GQL.addMutation.bind(GQL, 'createUser', user)).to.throw(Error, /GraysQL Error: Mutation/);
+      });
+      it('should allow to overwrite mutations when specified', function () {
+        GQL.registerType(TestUser);
+        const user = (GQL) => TestUser().mutations.createUser;
+        expect(GQL.addMutation.bind(GQL, 'createUser', user, true)).to.not.throw(Error, /GraysQL Error: Mutation/);
+      });
+      it('should return the added mutation', function () {
+        const user = (GQL) => TestUser().mutations.createUser;
+        expect(JSON.stringify(GQL.addQuery('createUser', user))).to.equal(JSON.stringify(user(GQL)));
+      });
     });
 
     describe('#generateSchema()', function () {

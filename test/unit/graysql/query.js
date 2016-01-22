@@ -37,6 +37,7 @@ module.exports = function (Query) {
         expect(query.generate({ Simple }).type).to.equal(Simple);
       });
 
+      it('should generate non nullable arguments');
       it('should generate a valid query', function () {
         const manQuery = {
           type: Simple,
