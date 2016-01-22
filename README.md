@@ -1,5 +1,7 @@
 # GraysQL #
 
+> NOTE: This is a work in progress.
+
 GraysQL is a manager and loader for [GraphQL](http://graphql.org). It provides
 a uniform way of organize your GraphQL schema. GraphQL tries to create an easy
 to read codebase. It features a plugins API to allow the extension of the core
@@ -216,6 +218,7 @@ console.log(GQL.options.DB);
 
 #### `GraysQL.use(extension)` ####
 > Receives a GraysQL extension and add it to GraysQL.
+
   * **Parameters**
     * `extension` *Function*: A valid [extension]() to be added.
 
@@ -231,6 +234,7 @@ GQL.use(Graylay);
 
 #### `GQL.registerType(type, [overwrite])` ####
 > Registers a new type in the system.
+
   * **Parameters**
     * `type` *Function*: A valid [type]() to be registered.
     * `overwrite` *Boolean*: A flag wether the registered type should overwrite
@@ -258,6 +262,7 @@ GQL.registerType(UserType);
 #### `GQL.registerInterface(interface, [overwrite])` ####
 > Registers a new interface in the system that can be later implemented by types. Interfaces should be registered
 > before the implementing types.
+
   * **Parameters**
     * `interface` *Function*: A valid [interface]() to be registered.
     * `overwrite` *Boolean*: A flag wether the registered interface should overwrite
@@ -283,6 +288,7 @@ GQL.registerInterface(EmployeeInterface);
 #### `GQL.addQuery(name, query, [overwrite])` ####
 > Adds a new query to the system. Note that if the type of the query is not already registered in the
 > system, this will throw an error.
+
   * **Parameters**
     * `name` *String*: The name of the query to be added.
     * `query` *Function*: A valid [query]() to be added.
@@ -294,6 +300,7 @@ GQL.registerInterface(EmployeeInterface);
 #### `GQL.addMutation(name, mutation, [overwrite])` ####
 > Adds a new mutation to the system. Note that if the type of the mutation is not already registered in the
 > system, this will throw an error.
+
   * **Parameters**
     * `name` *String*: The name of the mutation to be added.
     * `mutation` *Function*: A valid [mutation]() to be added.
@@ -304,6 +311,7 @@ GQL.registerInterface(EmployeeInterface);
 
 #### `GQL.generateSchema()` ####
 > Generates a [GraphQLSchema]() from the registered objects.
+
   * **Returns**
     * *GraphQLSchema*: The generated schema.
 
@@ -338,6 +346,7 @@ LoadFromDir defines a new method in GraysQL:
 
 #### `GQL.load(directory, [clean])` ####
 > Load the objects from the given folder and add them to GraysQL.
+
   * **Parameters**
     * `directory` *String*: The root folder that contains the objects.
     * `clean` *Boolean*: A flag wether the loaded objects should be merged with existent objects or
