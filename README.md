@@ -84,7 +84,7 @@ console.log(GraphQLUtils.printSchema(Schema));
 
 ### Type ###
 
-A [Type]() is a representation of a [GraphQLObjectType](). Types are the main
+A [Type](lib/graysql/type.js) is a representation of a [GraphQLObjectType](http://graphql.org/docs/api-reference-type-system/#graphqlobjecttype). Types are the main
 object in GraysQL and every other object relates to them in some way. They
 define the layout of your schema. To create a new Type simple create a
 JavaScript function that takes an argument that is a reference to the current
@@ -97,17 +97,17 @@ The mandatory keys are:
  create and store it. Other types will use this name to reference the type
  as well.
  * `fields`: An object representing the fields of the type. This is directly
- related to the `fields` property in [GraphQLObjectType]().
+ related to the `fields` property in GraphQLObjectType.
 
 The type of the field is specified as a string instead of a [GraphQLScalarType]().
 The basic list of supported types is:
-   * `Int`: Translates to [GraphQLInt]()
-   * `String`: Translates to [GraphQLString]()
+   * `Int`: Translates to [GraphQLInt](http://graphql.org/docs/api-reference-type-system/#graphqlint)
+   * `String`: Translates to [GraphQLString](http://graphql.org/docs/api-reference-type-system/#graphqlstring)
    * `TypeName`: Reference another type in the system.
    * `[TypeName]`: Reference an array of another type in the system. Equivalent
-   to [GraphQLList]().
+   to [GraphQLList](http://graphql.org/docs/api-reference-type-system/#graphqllist).
 
-Besides that, [plugins]() can define custom keys or even you can define your own
+Besides that, [extensions](https://github.com/larsbs/graysql#extensions) can define custom keys or even you can define your own
 keys if you need it.
 
 #### Example Types ####
@@ -157,8 +157,8 @@ TODO
 
 ### Query ###
 
-In order to make request to the [Schema]() you must define [Queries]() in your
-[Types](). As queries are only plain Javascript object, they can be defined
+In order to make request to the [Schema](http://graphql.org/docs/api-reference-type-system/#graphqlschema)
+you must define Queries in your [Types](https://github.com/larsbs/graysql#type). As queries are only plain Javascript object, they can be defined
 inline in your types or in separate files and later exported. However, if you
 define your queries in standalone files, you should wrap them in a function.
 This function, like types, will receive a single parameter that it's the
@@ -172,9 +172,9 @@ The query object should have three keys that are mandatory:
 
  * `type`: The type to which the query is applied. It has to be registered in
  the system before the query is added.
- * `args`: It's equivalent to `args` in [GraphQL queries](). Uses the same
- syntax for types than the key `fields` in [Types]().
- * `resolve`: It's the same as `resolve` in [GraphQL queries]().
+ * `args`: It's equivalent to `args` in [GraphQL queries](http://graphql.org/docs/getting-started/#server). Uses the same
+ syntax for types than the key `fields` in [Types](https://github.com/larsbs/graysql#type).
+ * `resolve`: It's the same as `resolve` in [GraphQL queries](http://graphql.org/docs/getting-started/#server).
 
 #### Example Queries ####
 
@@ -236,7 +236,7 @@ GQL.use(Graylay);
 > Registers a new type in the system.
 
   * **Parameters**
-    * `type` *Function*: A valid [type]() to be registered.
+    * `type` *Function*: A valid [type](https://github.com/larsbs/graysql#type) to be registered.
     * `overwrite` *Boolean*: A flag wether the registered type should overwrite
     an existent type with the same name or not.
   * **Returns**
@@ -264,7 +264,7 @@ GQL.registerType(UserType);
 > before the implementing types.
 
   * **Parameters**
-    * `interface` *Function*: A valid [interface]() to be registered.
+    * `interface` *Function*: A valid [interface](https://github.com/larsbs/graysql#interface) to be registered.
     * `overwrite` *Boolean*: A flag wether the registered interface should overwrite
     an existent interface with the same name or not.
   * **Returns**
@@ -291,7 +291,7 @@ GQL.registerInterface(EmployeeInterface);
 
   * **Parameters**
     * `name` *String*: The name of the query to be added.
-    * `query` *Function*: A valid [query]() to be added.
+    * `query` *Function*: A valid [query](https://github.com/larsbs/graysql#query) to be added.
     * `overwrite` *Boolean*: A flag wether the added query should overwrite
     an existent query with the same name or not.
   * **Returns**
@@ -303,14 +303,14 @@ GQL.registerInterface(EmployeeInterface);
 
   * **Parameters**
     * `name` *String*: The name of the mutation to be added.
-    * `mutation` *Function*: A valid [mutation]() to be added.
+    * `mutation` *Function*: A valid [mutation](https://github.com/larsbs/graysql#mutation) to be added.
     * `overwrite` *Boolean*: A flag wether the added mutation should overwrite an existent
     mutation with the same name or not.
   * **Returns**
     * *Object*: The added mutation.
 
 #### `GQL.generateSchema()` ####
-> Generates a [GraphQLSchema]() from the registered objects.
+> Generates a [GraphQLSchema](http://graphql.org/docs/api-reference-type-system/#graphqlschema) from the registered objects.
 
   * **Returns**
     * *GraphQLSchema*: The generated schema.
@@ -381,13 +381,13 @@ GQL.load('schema');
 ```
 
 ### Graylay ###
-Creates Relay compatible objects from your objects. Add needed entities for [Relay]() to work with your Schema. For
+Creates Relay compatible objects from your objects. Add needed entities for [Relay](https://facebook.github.io/relay/) to work with your Schema. For
 instance, creates the Node interface or establishes connections between your types. Besides to the common
 keys your type need to define, Graylay adds one more, `nodeId`. Graylay will use this key to generate the
-[Node]() interface needed by Relay.
+[Node](https://github.com/graphql/graphql-relay-js#object-identification) interface needed by Relay.
 
 Additionaly, Graylay adds a new symbol to define relations between types. If you precede a type name with `@`
-Graylay will translate that into a [connection]() with that type. Besides that, your types will need to define the usual `keys` needed by Relay like `isTypeOf` and to implement the Node interface.
+Graylay will translate that into a [connection](https://github.com/graphql/graphql-relay-js#connections) with that type. Besides that, your types will need to define the usual `keys` needed by Relay like `isTypeOf` and to implement the Node interface.
 
 ```javascript
 const GraysQL = require('graysql');
@@ -430,7 +430,7 @@ Usage examples can be found in [examples](examples) directory.
 
 ## Tests ##
 
-The tests are write with [mocha]() and can be runned with the following command:
+The tests are write with [mocha](https://mochajs.org/) and can be runned with the following command:
 
 ```bash
 $ npm test
