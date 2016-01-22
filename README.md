@@ -86,7 +86,7 @@ console.log(GraphQLUtils.printSchema(Schema));
 
 A [Type](lib/graysql/type.js) is a representation of a [GraphQLObjectType](http://graphql.org/docs/api-reference-type-system/#graphqlobjecttype). Types are the main
 object in GraysQL and every other object relates to them in some way. They
-define the layout of your schema. To create a new Type simple create a
+define the layout of your schema. To create a new Type simply create a
 JavaScript function that takes an argument that is a reference to the current
 GraysQL instance and that function should return an object with the keys
 needed to create an object.
@@ -112,7 +112,7 @@ keys if you need it.
 
 #### Example Types ####
 
-Types can be defined in it's own file. For example, `types/user.js` and
+Types can be defined in its own file. For example, `types/user.js` and
 `types/group.js`.
 
 ```javascript
@@ -161,7 +161,7 @@ In order to make request to the [Schema](http://graphql.org/docs/api-reference-t
 you must define Queries in your [Types](https://github.com/larsbs/graysql#type). As queries are only plain Javascript object, they can be defined
 inline in your types or in separate files and later exported. However, if you
 define your queries in standalone files, you should wrap them in a function.
-This function, like types, will receive a single parameter that it's the
+This function, like types, will receive a single parameter that is the
 current GQL intance, and should return the query object.
 
 Once a query is defined, you can add it to the sytem using two ways. Embedding
@@ -171,8 +171,8 @@ function `GQL.addQuery(query)`.
 The query object should have three keys that are mandatory:
 
  * `type`: The type to which the query is applied. It has to be registered in
- the system before the query is added.
- * `args`: It's equivalent to `args` in [GraphQL queries](http://graphql.org/docs/getting-started/#server). Uses the same
+ the system before the query will be generated.
+ * `args`: It's equivalent to `args` in [GraphQL queries](http://graphql.org/docs/getting-started/#server). It uses the same
  syntax for types than the key `fields` in [Types](https://github.com/larsbs/graysql#type).
  * `resolve`: It's the same as `resolve` in [GraphQL queries](http://graphql.org/docs/getting-started/#server).
 
@@ -382,7 +382,7 @@ GQL.load('schema');
 
 ### Graylay ###
 Creates Relay compatible objects from your objects. Add needed entities for [Relay](https://facebook.github.io/relay/) to work with your Schema. For
-instance, creates the Node interface or establishes connections between your types. Besides to the common
+instance, it creates the Node interface or establishes connections between your types. Besides to the common
 keys your type need to define, Graylay adds one more, `nodeId`. Graylay will use this key to generate the
 [Node](https://github.com/graphql/graphql-relay-js#object-identification) interface needed by Relay.
 
