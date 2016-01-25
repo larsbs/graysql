@@ -196,7 +196,7 @@ module.exports = function (GraysQL) {
             user: {
               type: User,
               args: {
-                id: { type: graphql.GraphQLInt }
+                id: { type: new graphql.GraphQLNonNull(graphql.GraphQLInt) }
               },
               resolve: (_, args) => DB.getUser(args.id)
             },

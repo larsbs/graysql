@@ -15,7 +15,7 @@ module.exports = function (GQL) {
       user: {
         type: 'User',
         args: {
-          id: { type: 'Int' }
+          id: { type: 'Int!' }
         },
         resolve: (_, args) => DB.getUser(args.id)
       }
@@ -24,7 +24,7 @@ module.exports = function (GQL) {
       createUser: {
         type: 'User',
         args: {
-          nick: { type: 'String' },
+          nick: { type: 'String!' },
         },
         resolve: (_, args) => ({
           id: 5,

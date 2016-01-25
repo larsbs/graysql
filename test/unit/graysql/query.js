@@ -58,7 +58,23 @@ module.exports = function (Query) {
         expect(query.generate({ Simple }).type).to.equal(Simple);
       });
 
-      it('should generate non nullable arguments');
+      it('should generate non nullable arguments', function () {
+        const expectedQuery = {
+          type: Simple,
+          args: {
+            id: { type: new graphql.GraphQLNonNull(graphql.GraphQLInt) }
+          },
+          resolve: (_, args) => { id: 1 }
+        };
+        const testQuery = new Query({
+          type: 'Simple',
+          args: {
+            id: { type: 'Int!' }
+          },
+          resolve: (_, args) => { id: 1 }
+        }).generate({ Simple });
+        expect(JSON.stringify(testQuery)).to.equal(JSON.stringify(expectedQuery));
+      });
 
       it('should generate a valid query', function () {
         const manQuery = {

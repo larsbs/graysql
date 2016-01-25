@@ -58,7 +58,23 @@ module.exports = function (Mutation) {
       it('should replace all the types in the mutation with valid GraphQL types', function () {
         expect(mutation.generate({ Simple }).type).to.equal(Simple);
       });
-      it('should generate non nullable arguments');
+      it('should generate non nullable arguments', function () {
+        const expectedMutation = {
+          type: Simple,
+          args: {
+            id: { type: new graphql.GraphQLNonNull(graphql.GraphQLInt) }
+          },
+          resolve: (_, args) => { id: 1 }
+        };
+        const testMutation = new Mutation({
+          type: 'Simple',
+          args: {
+            id: { type: 'Int!' }
+          },
+          resolve: (_, args) => { id: 1 }
+        }).generate({ Simple });
+        expect(JSON.stringify(testMutation)).to.equal(JSON.stringify(expectedMutation));
+      });
       it('should generate a valid mutation', function () {
         const manMutation = {
           type: Simple,
