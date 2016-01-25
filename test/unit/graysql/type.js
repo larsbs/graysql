@@ -25,6 +25,16 @@ module.exports = function (Type) {
       let types;
       let finalTypes;
 
+      let increaseOnParseTypeField = 1;
+      function onParseTypeField(payload) {
+        increaseOnParseTypeField += 1;
+      }
+
+      let increaseOnGenerateType = 1;
+      function onGenerateType(payload) {
+        increaseOnGenerateType += 1;
+      }
+
       before(function () {
         User = new graphql.GraphQLObjectType({
           name: 'User',
@@ -44,7 +54,7 @@ module.exports = function (Type) {
         });
 
         types = {
-          User: new Type(TestUser({ options: { DB }})),
+          User: new Type(TestUser({ options: { DB }}), { onParseTypeField: [onParseTypeField], onGenerateType: [onGenerateType] }),
           Group: new Type(TestGroup({ options: { DB }})),
         };
 
@@ -53,9 +63,13 @@ module.exports = function (Type) {
         finalTypes['Group'] = types['Group'].generate(finalTypes);
       });
 
-      it('should call onParseField listeners');
-      it('should call onGenerateType listeners');
-      it('should link to specified interfaces');
+      it('should call onParseTypeField listeners', function () {
+        types['User'].generate(finalTypes)._typeConfig.fields();
+        expect(increaseOnParseTypeField).to.be.above(1);
+      });
+      it('should call onGenerateType listeners', function () {
+        expect(increaseOnGenerateType).to.be.above(1);
+      });
       it('should generate a valid GraphQLObjectType', function () {
         expect(finalTypes['User']).to.include.keys(Object.keys(User));
         expect(finalTypes['User']._typeConfig.fields()).to.include.keys(Object.keys(User._typeConfig.fields()));
