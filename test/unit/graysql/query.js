@@ -20,6 +20,18 @@ module.exports = function (Query) {
 
     describe('#generate(types)', function () {
       let Simple;
+      let query;
+
+      let increaseOnParseQueryArg = 1;
+      function onParseQueryArg(payload) {
+        increaseOnParseQueryArg += 1;
+      }
+
+      let increaseOnGenerateQuery = 1;
+      function onGenerateQuery(payload) {
+        increaseOnGenerateQuery += 1;
+      }
+
       before(function () {
         Simple = new graphql.GraphQLObjectType({
           name: 'Simple',
@@ -27,13 +39,22 @@ module.exports = function (Query) {
             id: { type: graphql.GraphQLInt }
           })
         });
+
+        query = new Query(SimpleType().queries.simple, {
+          onParseQueryArg: [onParseQueryArg],
+          onGenerateQuery: [onGenerateQuery]
+        });
       });
 
-      it('should call onParseArgs listeners');
-      it('should call onGenerateQuery listeners');
+      it('should call onParseQueryArg listeners', function () {
+        query.generate({ Simple });
+        expect(increaseOnParseQueryArg).to.be.above(1);
+      });
+      it('should call onGenerateQuery listeners', function () {
+        expect(increaseOnGenerateQuery).to.be.above(1);
+      });
 
       it('should replace all the types in the query with valid GraphQL types', function () {
-        const query = new Query(SimpleType().queries.simple);
         expect(query.generate({ Simple }).type).to.equal(Simple);
       });
 
@@ -46,7 +67,6 @@ module.exports = function (Query) {
           },
           resolve: (_, args) => { id: 1 }
         };
-        const query = new Query(SimpleType().queries.simple);
         expect(JSON.stringify(query.generate({ Simple }))).to.equal(JSON.stringify(manQuery));
       });
 
