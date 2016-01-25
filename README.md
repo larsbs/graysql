@@ -438,7 +438,9 @@ $ npm test
 
 ## TODO ##
 
-- [ ] Add support for non nullable args in mutations and queries.
+- [x] Add support for non nullable args in mutations and queries.
+- [ ] Implement Graylay and LoadFromDir.
+- [ ] Document Plugin API.
 
 ## License ##
 
