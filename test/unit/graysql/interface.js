@@ -19,6 +19,17 @@ module.exports = function (Interface) {
     });
     describe('#generate(types)', function () {
       let Employee;
+      let testEmployee
+
+      let increaseOnParseInterfaceField = 1;
+      function onParseInterfaceField(payload) {
+        increaseOnParseInterfaceField += 1;
+      }
+
+      let increaseOnGenerateInterface = 1;
+      function onGenerateInterface(payload) {
+        increaseOnGenerateInterface += 1;
+      }
 
       before(function () {
         Employee = new graphql.GraphQLInterfaceType({
@@ -27,12 +38,19 @@ module.exports = function (Interface) {
             employeeId: { type: graphql.GraphQLString }
           })
         });
+
+        testEmployee = new Interface(TestEmployee(), { onParseInterfaceField: [onParseInterfaceField], onGenerateInterface: [onGenerateInterface] }).generate();
       });
 
-      it('should call onParseField listeners');
-      it('should call onGenerateInterface listeners');
+      it('should call onParseInterfaceField listeners', function () {
+        testEmployee._typeConfig.fields();
+        expect(increaseOnParseInterfaceField).to.be.above(1);
+      });
+      it('should call onGenerateInterface listeners', function () {
+        expect(increaseOnGenerateInterface).to.be.above(1);
+      });
       it('should generate a valid GraphQLInterfaceType', function () {
-        const testEmployee = new Interface(TestEmployee()).generate();
+        testEmployee = new Interface(TestEmployee()).generate();
         expect(testEmployee).to.include.keys(Object.keys(Employee));
         expect(testEmployee._typeConfig.fields()).to.include.keys(Object.keys(Employee._typeConfig.fields()));
       });
