@@ -20,6 +20,17 @@ module.exports = function (Mutation) {
       let simpleMutation;
       let mutation;
       let Simple;
+
+      let incrementOnParseMutationArg = 1;
+      function onParseMutationArg(payload) {
+        incrementOnParseMutationArg += 1;
+      }
+
+      let incrementOnGenerateMutation = 1;
+      function onGenerateMutation(payload) {
+        incrementOnGenerateMutation += 1;
+      }
+
       before(function () {
         simpleMutation = SimpleType().mutations.createSimple;
         Simple = new graphql.GraphQLObjectType({
@@ -29,11 +40,21 @@ module.exports = function (Mutation) {
           })
         });
       });
+
       beforeEach(function () {
-        mutation = new Mutation(simpleMutation);
+        mutation = new Mutation(simpleMutation, {
+          onParseMutationArg: [onParseMutationArg],
+          onGenerateMutation: [onGenerateMutation]
+        });
       });
-      it('should call onParseArgs listeners');
-      it('should call onGenerateMutation listeners');
+
+      it('should call onParseMutationArg listeners', function () {
+        mutation.generate({ Simple });
+        expect(incrementOnParseMutationArg).to.be.above(1);
+      });
+      it('should call onGenerateMutation listeners', function () {
+        expect(incrementOnGenerateMutation).to.be.above(1);
+      });
       it('should replace all the types in the mutation with valid GraphQL types', function () {
         expect(mutation.generate({ Simple }).type).to.equal(Simple);
       });

@@ -59,6 +59,7 @@ module.exports = function (Query) {
       });
 
       it('should generate non nullable arguments');
+
       it('should generate a valid query', function () {
         const manQuery = {
           type: Simple,
