@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run lint && mocha --check-leaks -t 5000 test/index.js",
+    "cover": "npm run lint && istanbul cover _mocha -- --check-leaks -t 5000 -b -R spec test/index.js",
     "lint": "eslint index.js lib/"
   },
   "keywords": [
@@ -22,6 +23,7 @@
     "eslint": "^1.10.3",
     "graphql": "^0.4.14",
     "graphql-relay": "^0.3.6",
+    "istanbul": "^0.4.2",
     "mocha": "^2.3.4"
   },
   "dependencies": {}
