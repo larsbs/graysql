@@ -443,13 +443,13 @@ Usage examples can be found in [examples](examples) directory.
 
 ## Tests ##
 
-The tests are write with [mocha](https://mochajs.org/) and can be runned with the following command:
+The tests are written with [mocha](https://mochajs.org/) and can be run with the following command:
 
 ```bash
 $ npm test
 ```
 
-To get a coverage report, run the following command:
+To get a code coverage report, run the following command:
 
 ```bash
 $ npm run cover
