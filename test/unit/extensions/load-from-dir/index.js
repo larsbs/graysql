@@ -4,9 +4,9 @@ const path = require('path');
 const expect = require('chai').expect;
 const GraphQLUtils = require('graphql/utilities');
 
-const DB = require('../../../../support/db');
-const TestSchema = require('../../../../support/test-schema');
-const TestUser = require('../../../../support/test-schema-dir/types/user');
+const DB = require('../../../support/db');
+const TestSchema = require('../../../support/test-schema');
+const TestUser = require('../../../support/test-schema-dir/types/user');
 
 
 module.exports = function (GraysQL, LoadFromDir) {
@@ -14,7 +14,7 @@ module.exports = function (GraysQL, LoadFromDir) {
   describe('@LoadFromDir', function () {
 
     let GQL;
-    const schemaDir = path.resolve(__dirname, '../../../../support/test-schema-dir');
+    const schemaDir = path.resolve(__dirname, '../../../support/test-schema-dir');
 
     beforeEach(function () {
       GQL = new GraysQL({ DB });

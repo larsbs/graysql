@@ -4,10 +4,10 @@ const expect = require('chai').expect;
 const graphql = require('graphql');
 const GraphQLUtils = require('graphql/utilities');
 
-const DB = require('../../../../support/db');
-const TestUser = require('../../../../support/test-schema-dir/relay-types/user');
-const TestGroup = require('../../../../support/test-schema-dir/relay-types/group');
-const TestSchemaRelay = require('../../../../support/test-schema-relay');
+const DB = require('../../../support/db');
+const TestUser = require('../../../support/test-schema-dir/relay-types/user');
+const TestGroup = require('../../../support/test-schema-dir/relay-types/group');
+const TestSchemaRelay = require('../../../support/test-schema-relay');
 
 
 module.exports = function (GraysQL, Graylay) {
