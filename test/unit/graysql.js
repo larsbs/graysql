@@ -10,6 +10,7 @@ const TestUser = require('../support/types/user');
 const TestGroup = require('../support/types/group');
 const SimpleType = require('../support/types/simple');
 const TestEmployee = require('../support/interfaces/employee');
+const TestSchema = require('../support/test-schema');
 
 
 module.exports = function (GraysQL) {
@@ -162,56 +163,16 @@ module.exports = function (GraysQL) {
       });
       it('should return the added mutation', function () {
         const user = (GQL) => TestUser().mutations.createUser;
-        expect(JSON.stringify(GQL.addQuery('createUser', user))).to.equal(JSON.stringify(user(GQL)));
+        expect(JSON.stringify(GQL.addMutation('createUser', user))).to.equal(JSON.stringify(user(GQL)));
       });
     });
 
     describe('#generateSchema()', function () {
       let GQL;
-      let manualSchema;
       before(function () {
         GQL = new GraysQL();
-        GQL.registerType(TestUser);
         GQL.registerType(TestGroup);
-
-        const User = new graphql.GraphQLObjectType({
-          name: 'User',
-          fields: () => ({
-            id: { type: graphql.GraphQLInt },
-            nick: { type: graphql.GraphQLString },
-            group: { type: Group }
-          })
-        });
-        const Group = new graphql.GraphQLObjectType({
-          name: 'Group',
-          fields: () => ({
-            id: { type: graphql.GraphQLInt },
-            name: { type: graphql.GraphQLString },
-            members: { type: new graphql.GraphQLList(User) }
-          })
-        });
-        const Query = new graphql.GraphQLObjectType({
-          name: 'Query',
-          fields: () => ({
-            user: {
-              type: User,
-              args: {
-                id: { type: new graphql.GraphQLNonNull(graphql.GraphQLInt) }
-              },
-              resolve: (_, args) => DB.getUser(args.id)
-            },
-            group: {
-              type: Group,
-              args: {
-                id: { type: graphql.GraphQLInt }
-              },
-              resolve: (_, args) => DB.getGroup(args.id)
-            }
-          })
-        });
-        manualSchema = new graphql.GraphQLSchema({
-          query: Query
-        });
+        GQL.registerType(TestUser);
       });
       it('should generate a valid schema', function (done) {
         expect(GQL.generateSchema.bind(GQL)).to.not.throw(Error);
@@ -237,11 +198,7 @@ module.exports = function (GraysQL) {
               group: {
                 id: 1,
                 name: 'Group 1',
-                members: [{
-                  id: 1
-                }, {
-                  id: 2
-                }]
+                members: [{ id: 1 }, { id: 2 }]
               }
             }
           }
@@ -253,7 +210,7 @@ module.exports = function (GraysQL) {
       });
       it('should generate a schema with all the specified objects', function () {
         const strGenSchema = GraphQLUtils.printSchema(GQL.generateSchema());
-        const strManSchema = GraphQLUtils.printSchema(manualSchema);
+        const strManSchema = GraphQLUtils.printSchema(TestSchema.Schema);
         expect(strGenSchema).to.equal(strManSchema);
       });
     });

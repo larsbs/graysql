@@ -344,13 +344,13 @@ in its own `query` key.
 
 LoadFromDir defines a new method in GraysQL:
 
-#### `GQL.load(directory, [clean])` ####
+#### `GQL.load(directory, [overwrite])` ####
 > Load the objects from the given folder and add them to GraysQL.
 
   * **Parameters**
     * `directory` *String*: The root folder that contains the objects.
-    * `clean` *Boolean*: A flag wether the loaded objects should be merged with existent objects or
-    clean the existent objects before adding the loaded ones.
+    * `Overwrite` *Boolean*: A flag wether the loaded objects should overwrite existent objects
+    with the same name or not.
 
 ```javascript
 // schema/types/user.js
@@ -441,6 +441,7 @@ $ npm test
 - [x] Add support for non nullable args in mutations and queries.
 - [ ] Implement Graylay and LoadFromDir.
 - [ ] Document Plugin API.
+- [ ] Provide an async version of LoadFromDir.
 
 ## License ##
 
