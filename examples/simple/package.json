@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js"
   },
-  "reposistory": {
+  "repository": {
     "type": "git",
     "url": "https://github.com/larsbs/graysql.git"
   },
