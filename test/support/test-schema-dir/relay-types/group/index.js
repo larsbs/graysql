@@ -10,7 +10,10 @@ module.exports = function (GQL) {
       id: { type: 'Int' },
       name: { type: 'String' },
       members: {
-        type: '@User'
+        type: '@User',
+        resolve: (group, args) => {
+          return group.members;
+        }
       }
     },
     queries: {
