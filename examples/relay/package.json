@@ -1,0 +1,22 @@
+{
+  "name": "graysql-relay-example",
+  "version": "1.0.0",
+  "description": "GraysQL relay example.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "reposistory": {
+    "type": "git",
+    "url": "https://github.com/larsbs/graysql.git"
+  },
+  "author": "Lorenzo Ruiz <lars.bs@hotmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.13.4",
+    "express-graphql": "^0.4.5",
+    "graphql": "^0.4.14",
+    "graphql-relay": "^0.3.6",
+    "graysql": "^0.3.1"
+  }
+}
