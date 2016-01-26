@@ -458,7 +458,7 @@ $ npm run cover
 ## TODO ##
 
 - [x] Add support for non nullable args in mutations and queries.
-- [ ] Implement Graylay and LoadFromDir.
+- [x] Implement Graylay and LoadFromDir.
 - [ ] Document Plugin API.
 - [ ] Provide an async version of LoadFromDir.
 
