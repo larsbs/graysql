@@ -3,6 +3,7 @@
 module.exports = function (GQL) {
   return {
     name: 'User',
+    interfaces: ['Node'],
     nodeId: id => GQL.options.DB.getUser(id),
     isTypeOf: obj => obj instanceof GQL.options.DB.User,
     fields: {

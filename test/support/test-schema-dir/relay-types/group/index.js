@@ -3,6 +3,7 @@
 module.exports = function (GQL) {
   return {
     name: 'Group',
+    interfaces: ['Node'],
     nodeId: id => GQL.options.DB.getGroup(id),
     isTypeOf: obj => obj instanceof GQL.options.DB.Group,
     fields: {
