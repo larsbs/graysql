@@ -36,8 +36,8 @@ app.use('/graphql', GraphQLHTTP({
 
 
 app.listen(app.get('port'), () => {
-  console.log(`Server started at: http://localhost:${app.get('port')}/`);
-  console.log('Using schema: ');
+  console.log(`### Server started at: http://localhost:${app.get('port')}/`);
+  console.log('### Using schema: ');
   console.log(GraphQLUtils.printSchema(Schema))
 });
 

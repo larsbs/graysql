@@ -9,6 +9,7 @@ function Group(id, name) {
 
 function User(id, nick, group) {
   this.id = id || users.length;
+  this.employeeId = nick + this.id;
   this.nick = nick;
   this.group = group;
   if (group) {
