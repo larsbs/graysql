@@ -6,10 +6,10 @@ const GraphQLUtils = require('graphql/utilities');
 
 const DB = require('../support/db');
 const TestExtension = require('../support/extensions/test-extension');
-const TestUser = require('../support/types/user');
-const TestGroup = require('../support/types/group');
+const TestUser = require('../support/test-schema-dir/types/user');
+const TestGroup = require('../support/test-schema-dir/types/group');
 const SimpleType = require('../support/types/simple');
-const TestEmployee = require('../support/interfaces/employee');
+const TestEmployee = require('../support/test-schema-dir/interfaces/employee');
 const TestSchema = require('../support/test-schema');
 
 
@@ -41,6 +41,7 @@ module.exports = function (GraysQL) {
       it('should merge non listeners with the prototype', function () {
         expect(GraysQL.prototype).to.contain.key('customMethod');
       });
+      it('should not merge private methods (prefixed with _) with the prototype');
       it('should pass GraysQL to the extensions', function () {
         expect(GQL.customMethod()).to.equal(GraysQL);
       });
@@ -146,23 +147,23 @@ module.exports = function (GraysQL) {
         expect(GQL.addMutation.bind(GQL, 'asdfadf', x => x)).to.not.throw(TypeError, /GraysQL Error: Expected mutation to be a function/);
       });
       it('should not add a mutation with an undefined name', function () {
-        const user = (GQL) => TestUser().mutations.createUser;
+        const user = TestUser().mutations.createUser;
         expect(GQL.addMutation.bind(GQL, null, user)).to.throw(Error, /GraysQL Error: Missing mutation name/);
         expect(GQL.addMutation.bind(GQL, undefined, user)).to.throw(Error, /GraysQL Error: Missing mutation name/);
         expect(GQL.addMutation.bind(GQL, '', user)).to.throw(Error, /GraysQL Error: Missing mutation name/);
       });
       it('should not overwrite a mutation by default', function () {
         GQL.registerType(TestUser);
-        const user = (GQL) => TestUser().mutations.createUser;
+        const user = TestUser().mutations.createUser;
         expect(GQL.addMutation.bind(GQL, 'createUser', user)).to.throw(Error, /GraysQL Error: Mutation/);
       });
       it('should allow to overwrite mutations when specified', function () {
         GQL.registerType(TestUser);
-        const user = (GQL) => TestUser().mutations.createUser;
+        const user = TestUser().mutations.createUser;
         expect(GQL.addMutation.bind(GQL, 'createUser', user, true)).to.not.throw(Error, /GraysQL Error: Mutation/);
       });
       it('should return the added mutation', function () {
-        const user = (GQL) => TestUser().mutations.createUser;
+        const user = TestUser().mutations.createUser;
         expect(JSON.stringify(GQL.addMutation('createUser', user))).to.equal(JSON.stringify(user(GQL)));
       });
     });
@@ -170,9 +171,10 @@ module.exports = function (GraysQL) {
     describe('#generateSchema()', function () {
       let GQL;
       before(function () {
-        GQL = new GraysQL();
+        GQL = new GraysQL({ DB });
         GQL.registerType(TestGroup);
         GQL.registerType(TestUser);
+        GQL.registerInterface(TestEmployee);
       });
       it('should generate a valid schema', function (done) {
         expect(GQL.generateSchema.bind(GQL)).to.not.throw(Error);
@@ -203,10 +205,12 @@ module.exports = function (GraysQL) {
             }
           }
         };
-        graphql.graphql(Schema, query).then(result => {
-          expect(result).to.deep.equal(expected);
-          done();
-        });
+        graphql.graphql(Schema, query)
+          .then(result => {
+            expect(result).to.deep.equal(expected);
+            done();
+          })
+          .catch(err => done(err));
       });
       it('should generate a schema with all the specified objects', function () {
         const strGenSchema = GraphQLUtils.printSchema(GQL.generateSchema());

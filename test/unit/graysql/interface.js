@@ -4,7 +4,7 @@ const graphql = require('graphql');
 const expect = require('chai').expect;
 
 const DB = require('../../support/db');
-const TestEmployee = require('../../support/interfaces/employee');
+const TestEmployee = require('../../support/test-schema-dir/interfaces/employee');
 
 
 module.exports = function (Interface) {

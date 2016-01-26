@@ -4,10 +4,21 @@ const graphql = require('graphql');
 const DB = require('./db');
 
 
+const Employee = new graphql.GraphQLInterfaceType({
+  name: 'Employee',
+  fields: () => ({
+    employeeId: { type: graphql.GraphQLString }
+  })
+});
+
+
 const User = new graphql.GraphQLObjectType({
   name: 'User',
+  interfaces: () => [Employee],
+  isTypeOf: obj => obj instanceof DB.User,
   fields: () => ({
     id: { type: graphql.GraphQLInt },
+    employeeId: { type: graphql.GraphQLString },
     nick: { type: graphql.GraphQLString },
     group: { type: Group }
   })
@@ -45,8 +56,23 @@ const Query = new graphql.GraphQLObjectType({
 });
 
 
+const Mutation = new graphql.GraphQLObjectType({
+  name: 'Mutation',
+  fields: () => ({
+    createUser: {
+      type: User,
+      args: {
+        nick: { type: new graphql.GraphQLNonNull(graphql.GraphQLString) }
+      },
+      resolve: (_, args) => ({ id: 5, nick: args.nick })
+    }
+  })
+});
+
+
 const Schema = new graphql.GraphQLSchema({
-  query: Query
+  query: Query,
+  mutation: Mutation
 });
 
 

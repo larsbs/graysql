@@ -20,7 +20,7 @@ module.exports = function (GraysQL, Graylay) {
       GQL.use(Graylay);
     });
 
-    it('should generate a valid Relay schema', function () {
+    it.skip('should generate a valid Relay schema', function () {
       GQL.registerType(TestUser);
       GQL.registerType(TestGroup);
       const result = GraphQLUtils.printSchema(GQL.generateSchema());
