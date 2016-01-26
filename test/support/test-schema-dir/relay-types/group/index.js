@@ -11,9 +11,7 @@ module.exports = function (GQL) {
       name: { type: 'String' },
       members: {
         type: '@User',
-        resolve: (group, args) => {
-          return group.members;
-        }
+        resolve: (group, args) => group.members
       }
     },
     queries: {
