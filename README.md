@@ -449,6 +449,12 @@ The tests are write with [mocha](https://mochajs.org/) and can be runned with th
 $ npm test
 ```
 
+To get a coverage report, run the following command:
+
+```bash
+$ npm run cover
+```
+
 ## TODO ##
 
 - [x] Add support for non nullable args in mutations and queries.
