@@ -321,6 +321,11 @@ GQL.registerInterface(EmployeeInterface);
 
 ## Extensions ##
 
+### [ORMLoader](https://github.com/larsbs/graysql-orm-loader) ###
+
+Loads the models defined with an ORM into GraysQL to generate a Schema from them. More in the
+project [repository](https://github.com/larsbs/graysql-orm-loader).
+
 ### LoadFromDir ###
 
 Allows GraysQL to scan a folder to build a schema from the files found. You only need to define your
