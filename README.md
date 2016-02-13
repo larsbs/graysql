@@ -464,7 +464,7 @@ $ npm run cover
 - [x] Implement Graylay and LoadFromDir.
 - [ ] Document Plugin API.
 - [ ] Provide an async version of LoadFromDir.
-- [ ] Add support for lists as arguments in queries and mutations.
+- [x] Add support for lists as arguments in queries and mutations.
 
 ## License ##
 
