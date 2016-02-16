@@ -5,16 +5,26 @@ const path = require('path');
 
 
 function _loadInterfaces(ifacesDir, overwrite) {
-  fs.readdirSync(ifacesDir)
-    .map(filename => require(`${ifacesDir}/${filename}`))
-    .map(iface => this.registerInterface(iface, overwrite));
+  try {
+    fs.readdirSync(ifacesDir)
+      .map(filename => require(`${ifacesDir}/${filename}`))
+      .map(iface => this.registerInterface(iface, overwrite));
+  }
+  catch (err) {
+    console.warn(`WARNING: No interfaces directory found at: ${ifacesDir}`);
+  }
 }
 
 function _loadTypes(typesDir, overwrite) {
-  fs.readdirSync(typesDir)
-    .filter(filename => fs.statSync(path.join(typesDir, filename)).isDirectory())
-    .map(typeDir => require(`${typesDir}/${typeDir}`))
-    .map(type => this.registerType(type, overwrite));
+  try {
+    fs.readdirSync(typesDir)
+      .filter(filename => fs.statSync(path.join(typesDir, filename)).isDirectory())
+      .map(typeDir => require(`${typesDir}/${typeDir}`))
+      .map(type => this.registerType(type, overwrite));
+  }
+  catch (err) {
+    console.warn(`WARNING: No types directory found at: ${typesDir}`);
+  }
 }
 
 module.exports = function () {
