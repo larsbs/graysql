@@ -9,7 +9,14 @@ module.exports = function (GQL) {
     fields: {
       id: { type: 'Int' },
       nick: { type: 'String' },
-      group: { type: 'Group' }
+      group: { type: 'Group' },
+      dummy: {
+        type: 'String',
+        args: {
+          id: { type: 'String' },
+        },
+        resolve: () => 'Hello dummy!',
+      },
     },
     queries: {
       user: {

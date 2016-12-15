@@ -74,6 +74,11 @@ module.exports = function (Type) {
         expect(finalTypes['User']).to.include.keys(Object.keys(User));
         expect(finalTypes['User']._typeConfig.fields()).to.include.keys(Object.keys(User._typeConfig.fields()));
       });
+      it('should parse args in fields', function () {
+        expect(finalTypes['User']._typeConfig.fields().dummy).to.include.keys(['args']);
+        expect(finalTypes['User']._typeConfig.fields().dummy.args).to.include.keys(['id']);
+        expect(finalTypes['User']._typeConfig.fields().dummy.args.id.type.name).to.equal('String');
+      });
       it('should link to other GraphQLObjectTypes if specified', function () {
         expect(finalTypes['User']._typeConfig.fields().group.type).to.equal(finalTypes['Group']);
         expect(JSON.stringify(finalTypes['Group']._typeConfig.fields().members.type)).to.equal(JSON.stringify(new graphql.GraphQLList(finalTypes['User'])));
