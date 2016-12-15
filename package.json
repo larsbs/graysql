@@ -1,6 +1,6 @@
 {
   "name": "graysql",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "description": "GraysQL is a GraphQL manager and loader.",
   "main": "index.js",
   "scripts": {
