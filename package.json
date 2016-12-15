@@ -18,14 +18,14 @@
     "url": "https://github.com/larsbs/graysql.git"
   },
   "peerDependencies": {
-    "graphql": "^0.4.14",
-    "graphql-relay": "^0.3.6"
+    "graphql": "^0.8.2",
+    "graphql-relay": "^0.4.3"
   },
   "devDependencies": {
     "chai": "^3.4.1",
     "eslint": "^1.10.3",
-    "graphql": "^0.4.14",
-    "graphql-relay": "^0.3.6",
+    "graphql": "^0.8.2",
+    "graphql-relay": "^0.4.3",
     "istanbul": "^0.4.2",
     "mocha": "^2.3.4"
   },
